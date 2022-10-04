@@ -10,7 +10,7 @@ public interface MenuService {
 
     public MenuDto buscarMenu(Integer id);
 
-    public MenuDto crearMenu(MenuDto menuDto);
+    public MenuDto agregarMenu(MenuDto menuDto);
 
     public void editarMenu(MenuDto menuDto);
 

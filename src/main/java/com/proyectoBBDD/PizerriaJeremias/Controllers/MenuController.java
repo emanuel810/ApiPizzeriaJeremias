@@ -15,28 +15,28 @@ public class MenuController {
     private MenuService menuService;
 
     @GetMapping
-    public List<MenuDto> listaEmpresa(){
+    public List<MenuDto> listaMenu(){
         return menuService.listarMenu();
     }
 
     @GetMapping(value= "/{id}")
-    public MenuDto obtenerEmpresa(@PathVariable Integer id){
+    public MenuDto buscarMenu(@PathVariable Integer id){
         return  menuService.buscarMenu(id);
     }
 
     @PostMapping()
-    public MenuDto crearEmpresa(@RequestBody MenuDto menuDto) {
-        return menuService.crearMenu(menuDto);
+    public MenuDto agregarMenu(@RequestBody MenuDto menuDto) {
+        return menuService.agregarMenu(menuDto);
     }
 
 
     @PutMapping()
-    public void modificarEmpresa(@RequestBody MenuDto menuDto){
+    public void editarMenu(@RequestBody MenuDto menuDto){
         menuService.editarMenu(menuDto);
     }
 
     @DeleteMapping("/{id}")
-    public void borrarEmpresa(@PathVariable Integer id){
+    public void borrarMenu(@PathVariable Integer id){
         menuService.borrarMenu(id); ;
     }
 

@@ -59,8 +59,16 @@ public class MenuServiceImpl implements MenuService{
     }
 
     @Override
-    public MenuDto crearMenu(MenuDto menuDto) {
+    public MenuDto agregarMenu(MenuDto menuDto) {
         Menu menu = mappedMenu(menuDto);
+
+        Optional<Menu> idmenu = menuRepository.findById(menuDto.getMenuNumero());
+
+        if(idmenu.isPresent()){
+            menuDto.setCodigoError(1);
+            menuDto.setMensajeError("Id repetido");
+            return menuDto;
+        }
 
         if(menu.validarDatos()) {
             Menu menuSave = menuRepository.save(menu);
