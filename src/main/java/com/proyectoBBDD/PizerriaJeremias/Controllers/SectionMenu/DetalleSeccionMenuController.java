@@ -1,6 +1,8 @@
 package com.proyectoBBDD.PizerriaJeremias.Controllers.SectionMenu;
 
+import com.proyectoBBDD.PizerriaJeremias.Dto.SectionMenu.DetalleSeccionMenuDto;
 import com.proyectoBBDD.PizerriaJeremias.Dto.SectionMenu.SeccionMenuDto;
+import com.proyectoBBDD.PizerriaJeremias.Services.SectionMenu.DetalleSeccionMenuService;
 import com.proyectoBBDD.PizerriaJeremias.Services.SectionMenu.SeccionMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,35 +16,37 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("seccionMenu")
-public class SeccionMenuController {
+@RequestMapping("detalleSeccionMenu")
+public class DetalleSeccionMenuController {
+
 
     @Autowired
-    private SeccionMenuService seccionMenuService;
+    private DetalleSeccionMenuService detalleSeccionMenuService;
 
     @GetMapping
-    public List<SeccionMenuDto> listaSeccionMenu(){
-        return seccionMenuService.listaSeccionMenu();
+    public List<DetalleSeccionMenuDto> listaSeccionMenu(){
+        return detalleSeccionMenuService.listaDetalleSeccionMenu();
     }
+
     @GetMapping(value = "/{id}")
-    public  SeccionMenuDto buscarSeccionMenu(@PathVariable Integer id){
-        return seccionMenuService.buscarSeccionMenu(id);
+    public  DetalleSeccionMenuDto buscarSeccionMenu(@PathVariable Integer id){
+        return detalleSeccionMenuService.buscarDetalleSeccionMenu(id);
     }
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    public SeccionMenuDto agregarSeccionMenu(@Valid @RequestBody SeccionMenuDto seccionMenuDto){
-        return seccionMenuService.agregarSeccionMenu(seccionMenuDto);
+    public DetalleSeccionMenuDto agregarSeccionMenu(@Valid @RequestBody DetalleSeccionMenuDto detalleSeccionMenuDto){
+        return detalleSeccionMenuService.agregarDetalleSeccionMenu(detalleSeccionMenuDto);
     }
 
     @PutMapping()
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public  void editarSeccionMenu(@Valid @RequestBody SeccionMenuDto seccionMenuDto){
-         seccionMenuService.editarSeccionMenu(seccionMenuDto);
+    public  void editarSeccionMenu(@Valid @RequestBody DetalleSeccionMenuDto detalleSeccionMenuDto){
+        detalleSeccionMenuService.editarDetalleSeccionMenu(detalleSeccionMenuDto);
     }
 
     @DeleteMapping
     public void borrarSeccionMenu(Integer id){
-        seccionMenuService.borrarSeccionMenu(id);
+        detalleSeccionMenuService.borrarDetalleSeccionMenu(id);
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
@@ -56,4 +60,5 @@ public class SeccionMenuController {
         });
         return errors ;
     }
+
 }

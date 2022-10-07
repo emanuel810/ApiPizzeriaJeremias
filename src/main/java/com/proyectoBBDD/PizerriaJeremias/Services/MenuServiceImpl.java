@@ -3,6 +3,7 @@ package com.proyectoBBDD.PizerriaJeremias.Services;
 import com.proyectoBBDD.PizerriaJeremias.Dto.MenuDto;
 import com.proyectoBBDD.PizerriaJeremias.Entities.Menu;
 import com.proyectoBBDD.PizerriaJeremias.Repository.MenuRepository;
+import com.proyectoBBDD.PizerriaJeremias.exceptions.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ public class MenuServiceImpl implements MenuService{
     }
 
     public MenuDto mappedMenuDto(Menu menu) {
-
         return modeloObject.map(menu, MenuDto.class);
     }
 
@@ -45,6 +45,19 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public MenuDto buscarMenu(Integer id) {
+
+        Optional<Menu> menuOptional = menuRepository.findById(id);
+
+        if(menuOptional.isPresent()){
+            Menu menuTemp = menuOptional.get();
+            MenuDto menuDto2 = mappedMenuDto(menuTemp);
+            return  menuDto2;
+        }else{
+            throw new NotFoundException("Menu no encontrado");
+        }
+
+
+        /*
         Menu menu = menuRepository.findById(id).orElse(null);
         MenuDto menuDto =new MenuDto();
         if(menu==null) {
@@ -55,24 +68,39 @@ public class MenuServiceImpl implements MenuService{
         }
         menuDto = mappedMenuDto(menu);
         menuDto.setCodigoError(0);
-        return menuDto;
+        return menuDto;*/
     }
 
     @Override
     public MenuDto agregarMenu(MenuDto menuDto) {
+
+        Optional<Menu> menuOptional = menuRepository.findById(menuDto.getMenuNumero());
+
+        Menu menu = mappedMenu(menuDto);
+
+        if(!menuOptional.isPresent()){
+            Menu menuSave = menuRepository.save(menu);
+            menuDto.setMenuNumero(menuSave.getNumeroMenu());
+
+        }else {
+            throw new NotFoundException("No se permite identificadores repetidos");
+        }
+
+        /*
         Menu menu = mappedMenu(menuDto);
 
         Optional<Menu> idmenu = menuRepository.findById(menuDto.getMenuNumero());
+
 
         if(idmenu.isPresent()){
             menuDto.setCodigoError(1);
             menuDto.setMensajeError("Id repetido");
             return menuDto;
-        }
+        }-
 
         if(menu.validarDatos()) {
             Menu menuSave = menuRepository.save(menu);
-            menuDto.setMenuNumero(menuSave.getMenuNumero());
+            menuDto.setMenuNumero(menuSave.getNumeroMenu());
             menuDto.setMensajeError("Guardado correctamente");
             menuDto.setCodigoError(0);
             return menuDto;
@@ -80,12 +108,26 @@ public class MenuServiceImpl implements MenuService{
             menuDto.setCodigoError(1);
             menuDto.setMensajeError("No es posible guardar la informacion solicitada");
             return menuDto;
-        }
+        }*/
+
+        return menuDto;
     }
 
     @Override
     public void editarMenu(MenuDto menuDto) {
 
+        Optional<Menu> menuOptional = menuRepository.findById(menuDto.getMenuNumero());
+        if(menuOptional.isPresent()){
+            Menu menuObtenido = menuOptional.get();
+            if(!menuObtenido.getMenuDescripcion().equals(menuDto.getMenuDescripcion())){
+                menuObtenido.setMenuDescripcion(menuDto.getMenuDescripcion());
+            }
+            menuRepository.save(menuObtenido);
+        }else{
+            throw new NotFoundException("Menu no encontrado");
+        }
+
+        /*
         Optional<Menu> menu = menuRepository.findById(menuDto.getMenuNumero());
 
         if(menu.isPresent()){
@@ -94,13 +136,15 @@ public class MenuServiceImpl implements MenuService{
                 menuObtenido.setMenuDescripcion(menuDto.getMenuDescripcion());
             }
             menuRepository.save(menuObtenido);
-        }
+        }*/
     }
 
     @Override
     public void borrarMenu(Integer id) {
         if(menuRepository.existsById(id)){
             menuRepository.deleteById(id);
+        }else{
+            throw new NotFoundException("Menu no encontrado");
         }
     }
 }

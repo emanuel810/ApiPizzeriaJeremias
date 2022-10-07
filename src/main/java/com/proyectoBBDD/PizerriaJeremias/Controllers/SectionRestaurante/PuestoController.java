@@ -1,7 +1,8 @@
-package com.proyectoBBDD.PizerriaJeremias.Controllers.SectionMenu;
+package com.proyectoBBDD.PizerriaJeremias.Controllers.SectionRestaurante;
 
-import com.proyectoBBDD.PizerriaJeremias.Dto.SectionMenu.SeccionMenuDto;
-import com.proyectoBBDD.PizerriaJeremias.Services.SectionMenu.SeccionMenuService;
+import com.proyectoBBDD.PizerriaJeremias.Dto.SectionRestaurante.PuestoDto;
+import com.proyectoBBDD.PizerriaJeremias.Services.SectionRestaurante.PuestoService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -14,35 +15,35 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("seccionMenu")
-public class SeccionMenuController {
+@RequestMapping("/puesto")
+public class PuestoController {
 
     @Autowired
-    private SeccionMenuService seccionMenuService;
+    private PuestoService puestoService;
 
     @GetMapping
-    public List<SeccionMenuDto> listaSeccionMenu(){
-        return seccionMenuService.listaSeccionMenu();
+    public List<PuestoDto> listaPuesto(){
+        return puestoService.listaPuesto();
     }
     @GetMapping(value = "/{id}")
-    public  SeccionMenuDto buscarSeccionMenu(@PathVariable Integer id){
-        return seccionMenuService.buscarSeccionMenu(id);
+    public PuestoDto buscarPuesto(@PathVariable Integer id){
+        return puestoService.buscarPuesto(id);
     }
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public SeccionMenuDto agregarSeccionMenu(@Valid @RequestBody SeccionMenuDto seccionMenuDto){
-        return seccionMenuService.agregarSeccionMenu(seccionMenuDto);
+    public PuestoDto agregarPuesto(@Valid @RequestBody PuestoDto puestoDto){
+        return puestoService.agregarPuesto(puestoDto);
     }
 
-    @PutMapping()
+    @PutMapping
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public  void editarSeccionMenu(@Valid @RequestBody SeccionMenuDto seccionMenuDto){
-         seccionMenuService.editarSeccionMenu(seccionMenuDto);
+    public void editarPuesto(@Valid @RequestBody PuestoDto puestoDto){
+        puestoService.editarPuesto(puestoDto);
     }
 
-    @DeleteMapping
-    public void borrarSeccionMenu(Integer id){
-        seccionMenuService.borrarSeccionMenu(id);
+    @DeleteMapping(value = "/{id}")
+    public void borrarPuesto(@PathVariable Integer id){
+        puestoService.borrarPuesto(id);
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
@@ -56,4 +57,5 @@ public class SeccionMenuController {
         });
         return errors ;
     }
+
 }
